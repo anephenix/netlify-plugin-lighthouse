@@ -58,7 +58,7 @@ const runLighthouse = async (browserPath, url) => {
 
     // `.report` is the HTML report as a string
     const reportHtml = results.report;
-    const reportFilePath = path.join(process.cwd(), 'out', 'test_paul.html');
+    const reportFilePath = path.join(process.cwd(), 'out', 'lighthouse.html');
     console.log('Writing Lighthouse html report to', reportFilePath);
     fs.writeFileSync(reportFilePath, reportHtml);
 
