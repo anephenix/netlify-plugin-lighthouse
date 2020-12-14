@@ -10,6 +10,8 @@ process.env.DEBUG_COLORS = 'true';
 
 const puppeteer = require('puppeteer');
 const lighthouse = require('lighthouse');
+const fs = require('fs');
+const path = require('path');
 const log = require('lighthouse-logger');
 const chromeLauncher = require('chrome-launcher');
 
@@ -47,13 +49,19 @@ const runLighthouse = async (browserPath, url) => {
     });
     const results = await lighthouse(url, {
       port: chrome.port,
-      output: ['json', 'html'],
-      outputPath: 'out/paul_test',
+      output: 'html',
       logLevel,
     });
     if (results.lhr.runtimeError) {
       throw new Error(results.lhr.runtimeError.message);
     }
+
+    // `.report` is the HTML report as a string
+    const reportHtml = results.report;
+    const reportFilePath = path.join(process.cwd(), 'out', 'test_paul.html');
+    console.log('Writing Lighthouse html report to', reportFilePath);
+    fs.writeFileSync(reportFilePath, reportHtml);
+
     return results;
   } finally {
     if (chrome) {
